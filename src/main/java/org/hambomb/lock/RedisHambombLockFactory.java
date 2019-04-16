@@ -34,16 +34,19 @@ public class RedisHambombLockFactory implements HambombLockFactory {
 
     @Override
     public HambombLock create(String key, Duration duration) {
-        return null;
+
+        HambombLock hambombLock = new RedisHambombLockImpl(key, redisTemplate, duration, duration);
+
+        return hambombLock;
     }
 
     @Override
     public HambombLock create(Object object, Duration duration) {
-        return null;
+        return create(String.valueOf(object.hashCode()), duration);
     }
 
     @Override
     public HambombLock create(Object object, Lockable lockable, Duration duration) {
-        return null;
+        return create(lockable.run(object), duration);
     }
 }

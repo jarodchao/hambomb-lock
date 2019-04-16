@@ -15,7 +15,12 @@
  */
 package org.hambomb.lock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.Assert;
+
+import java.time.Duration;
 
 /**
  * @author: <a herf="mailto:jarodchao@126.com>jarod </a>
@@ -23,25 +28,74 @@ import org.springframework.data.redis.core.RedisTemplate;
  */
 public class RedisHambombLockImpl implements HambombLock {
 
+    private static final String LOCK_PATH = "hambomb:locks";
+
+    private String LockKey;
+
     private RedisTemplate<String,Object> redisTemplate;
 
-    public RedisHambombLockImpl(RedisTemplate<String, Object> redisTemplate) {
+    private Duration waitTimeout;
+
+    private Duration lockTimeout;
+
+    private static final Logger LOG = LoggerFactory.getLogger(RedisHambombLockImpl.class);
+
+    public RedisHambombLockImpl(String lockKey, RedisTemplate<String, Object> redisTemplate,
+                                Duration waitTimeout, Duration lockTimeout) {
+        this.LockKey = getLockPath(lockKey);
         this.redisTemplate = redisTemplate;
+        this.waitTimeout = waitTimeout;
+        this.lockTimeout = lockTimeout;
     }
 
     @Override
     public boolean lock() {
 
-        System.out.println("RedisHambombLockImpl lock");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("RedisHambombLockImpl lock");
+        }
 
-        return true;
+        boolean locked = redisTemplate.opsForValue().setIfAbsent(this.LockKey, this.LockKey, lockTimeout);
+
+        if (locked) {
+            return true;
+        }else {
+            if (waitTimeout != null && !waitTimeout.isZero()) {
+
+                try {
+                    LOG.debug("wait1");
+                    waitTimeout.wait();
+                    LOG.debug("wait2");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                return redisTemplate.opsForValue().setIfAbsent(this.LockKey, this.LockKey, lockTimeout);
+            }
+        }
+
+        return false;
     }
 
     @Override
     public boolean unlock() {
 
-        System.out.println("RedisHambombLockImpl unlock");
+        Assert.notNull(this.LockKey,"LockKey must not be null!");
 
+        if (redisTemplate.hasKey(this.LockKey)) {
+            System.out.println("还未超时，手动删除key.");
+            return redisTemplate.delete(this.LockKey);
+        }
+
+        System.out.println("超时，自动删除key.");
         return true;
+
+    }
+
+    private String getLockPath(String lockKey) {
+        StringBuilder stringBuilder = new StringBuilder(LOCK_PATH);
+        stringBuilder.append(":");
+        stringBuilder.append(lockKey);
+        return stringBuilder.toString();
     }
 }
