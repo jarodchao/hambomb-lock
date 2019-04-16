@@ -1,0 +1,31 @@
+{
+  "groups": [
+    {
+      "name": "hambomb.lock",
+      "type": "org.hambomb.lock.autoconfigure.HambombLockAutoConfiguration",
+      "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "hambomb.lock.agentStrategy",
+      "type": "org.hambomb.lock.autoconfigure.AgentStrategy",
+      "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties"
+    },
+    {
+      "name": "hambomb.cache.zkUrl",
+      "type": "java.lang.String",
+      "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties"
+    },
+    {
+      "name": "hambomb.cache.sessionTimeout",
+      "type": "java.lang.Integer",
+      "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties"
+    },
+    {
+      "name": "hambomb.cache.connectionTimeout",
+      "type": "java.lang.Integer",
+      "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/examples/agent-redis/agent-redis.iml" filepath="$PROJECT_DIR$/examples/agent-redis/agent-redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/examples/agent-zookeeper/agent-zookeeper.iml" filepath="$PROJECT_DIR$/examples/agent-zookeeper/agent-zookeeper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hambomb-lock.iml" filepath="$PROJECT_DIR$/hambomb-lock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hambomb-lock/hambomb-lock.iml" filepath="$PROJECT_DIR$/hambomb-lock/hambomb-lock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/hanbomb-lock.iml" filepath="$PROJECT_DIR$/.idea/hanbomb-lock.iml" />
+    </modules>
+  </component>
+</project>

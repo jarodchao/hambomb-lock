@@ -1,0 +1,6 @@
+hambomb:
+  lock:
+    agentStrategy: zookeeper
+
+server:
+  port: 8888
