@@ -15,6 +15,8 @@
  */
 package org.hambomb.lock;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -51,10 +53,6 @@ public class RedisHambombLockImpl implements HambombLock {
     @Override
     public boolean lock() {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("RedisHambombLockImpl lock");
-        }
-
         boolean locked = redisTemplate.opsForValue().setIfAbsent(this.LockKey, this.LockKey, lockTimeout);
 
         if (locked) {
@@ -62,13 +60,12 @@ public class RedisHambombLockImpl implements HambombLock {
         }else {
             if (waitTimeout != null && !waitTimeout.isZero()) {
 
-                try {
-                    LOG.debug("wait1");
-                    waitTimeout.wait();
-                    LOG.debug("wait2");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Thread id {} waiting for lock.", Thread.currentThread().getId());
                 }
+
+                Timer timer = new Timer(waitTimeout.plusMillis(RandomUtils.nextLong(0L, 5L)));
+                timer.watch();
 
                 return redisTemplate.opsForValue().setIfAbsent(this.LockKey, this.LockKey, lockTimeout);
             }
@@ -83,11 +80,9 @@ public class RedisHambombLockImpl implements HambombLock {
         Assert.notNull(this.LockKey,"LockKey must not be null!");
 
         if (redisTemplate.hasKey(this.LockKey)) {
-            System.out.println("还未超时，手动删除key.");
             return redisTemplate.delete(this.LockKey);
         }
 
-        System.out.println("超时，自动删除key.");
         return true;
 
     }

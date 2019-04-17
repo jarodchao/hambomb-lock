@@ -46,10 +46,11 @@ public class HambombLockAutoConfiguration {
     @ConditionalOnProperty(name = "hambomb.lock.agentStrategy", havingValue = "zookeeper")
     public HambombLockFactory hambombLockFactoryForZK() {
 
-        ZkClient zkClient = new ZkClient(hambombLockProperties.getZkUrl(), hambombLockProperties.getSessionTimeout(),
-                hambombLockProperties.getConnectionTimeout());
+        ZkClient zkClient = new ZkClient(hambombLockProperties.getZookeepr().getZkUrl(),
+                hambombLockProperties.getZookeepr().getSessionTimeout(),
+                hambombLockProperties.getZookeepr().getConnectionTimeout());
 
-        HambombLockFactory hambombLockFactory = new ZookeeperHambombLockFactory(zkClient);
+        HambombLockFactory hambombLockFactory = new ZookeeperHambombLockFactory(hambombLockProperties, zkClient);
 
         return hambombLockFactory;
 
@@ -65,7 +66,7 @@ public class HambombLockAutoConfiguration {
         redisTemplate.setConnectionFactory(factory);
         redisTemplate.afterPropertiesSet();
 
-        HambombLockFactory hambombLockFactory = new RedisHambombLockFactory(redisTemplate);
+        HambombLockFactory hambombLockFactory = new RedisHambombLockFactory(hambombLockProperties, redisTemplate);
 
         return hambombLockFactory;
 

@@ -15,6 +15,7 @@
  */
 package org.hambomb.lock;
 
+import org.hambomb.lock.autoconfigure.HambombLockProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Duration;
@@ -23,30 +24,23 @@ import java.time.Duration;
  * @author: <a herf="mailto:jarodchao@126.com>jarod </a>
  * @date: 2019-04-16
  */
-public class RedisHambombLockFactory implements HambombLockFactory {
+public class RedisHambombLockFactory extends AbstractHambombLockFactory {
 
     private RedisTemplate<String,Object> redisTemplate;
 
-
-    public RedisHambombLockFactory(RedisTemplate<String, Object> redisTemplate) {
+    public RedisHambombLockFactory(HambombLockProperties hambombLockProperties,
+                                   RedisTemplate<String, Object> redisTemplate) {
+        super(hambombLockProperties);
         this.redisTemplate = redisTemplate;
     }
 
     @Override
-    public HambombLock create(String key, Duration duration) {
+    public HambombLock create(String key, Duration timeout, Duration waitTimeout) {
 
-        HambombLock hambombLock = new RedisHambombLockImpl(key, redisTemplate, duration, duration);
+        HambombLock hambombLock = new RedisHambombLockImpl(key, redisTemplate,
+                getTimeout(timeout), getWaitTimeout(waitTimeout));
 
         return hambombLock;
     }
 
-    @Override
-    public HambombLock create(Object object, Duration duration) {
-        return create(String.valueOf(object.hashCode()), duration);
-    }
-
-    @Override
-    public HambombLock create(Object object, Lockable lockable, Duration duration) {
-        return create(lockable.run(object), duration);
-    }
 }

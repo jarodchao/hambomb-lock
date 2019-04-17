@@ -26,11 +26,11 @@ public class HambombLockProperties {
 
     private AgentStrategy agentStrategy;
 
-    private String zkUrl = "localhost:2181";
+    private Integer lockTimeout = -1;
 
-    private Integer sessionTimeout = 5000;
+    private Integer lockWaitTimeout = -1;
 
-    private Integer connectionTimeout = 5000;
+    private Zookeepr zookeepr = new Zookeepr();
 
     public AgentStrategy getAgentStrategy() {
         return agentStrategy;
@@ -40,27 +40,61 @@ public class HambombLockProperties {
         this.agentStrategy = agentStrategy;
     }
 
-    public String getZkUrl() {
-        return zkUrl;
+    public Integer getLockTimeout() {
+        return lockTimeout;
     }
 
-    public void setZkUrl(String zkUrl) {
-        this.zkUrl = zkUrl;
+    public void setLockTimeout(Integer lockTimeout) {
+        this.lockTimeout = lockTimeout;
     }
 
-    public Integer getSessionTimeout() {
-        return sessionTimeout;
+    public Integer getLockWaitTimeout() {
+        return lockWaitTimeout;
     }
 
-    public void setSessionTimeout(Integer sessionTimeout) {
-        this.sessionTimeout = sessionTimeout;
+    public void setLockWaitTimeout(Integer lockWaitTimeout) {
+        this.lockWaitTimeout = lockWaitTimeout;
     }
 
-    public Integer getConnectionTimeout() {
-        return connectionTimeout;
+    public Zookeepr getZookeepr() {
+        return zookeepr;
     }
 
-    public void setConnectionTimeout(Integer connectionTimeout) {
-        this.connectionTimeout = connectionTimeout;
+    public void setZookeepr(Zookeepr zookeepr) {
+        this.zookeepr = zookeepr;
     }
+
+    public static class Zookeepr {
+
+        private String zkUrl = "localhost:2181";
+
+        private Integer sessionTimeout = 5000;
+
+        private Integer connectionTimeout = 5000;
+
+        public String getZkUrl() {
+            return zkUrl;
+        }
+
+        public void setZkUrl(String zkUrl) {
+            this.zkUrl = zkUrl;
+        }
+
+        public Integer getSessionTimeout() {
+            return sessionTimeout;
+        }
+
+        public void setSessionTimeout(Integer sessionTimeout) {
+            this.sessionTimeout = sessionTimeout;
+        }
+
+        public Integer getConnectionTimeout() {
+            return connectionTimeout;
+        }
+
+        public void setConnectionTimeout(Integer connectionTimeout) {
+            this.connectionTimeout = connectionTimeout;
+        }
+    }
+
 }

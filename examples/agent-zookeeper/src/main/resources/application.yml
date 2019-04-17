@@ -1,6 +1,8 @@
 hambomb:
   lock:
     agentStrategy: zookeeper
+    lock-timeout: 500
+    lock-wait-timeout: 500
 
 server:
   port: 8888

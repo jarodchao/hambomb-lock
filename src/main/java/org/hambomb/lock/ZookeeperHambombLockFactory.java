@@ -16,6 +16,8 @@
 package org.hambomb.lock;
 
 import org.I0Itec.zkclient.ZkClient;
+import org.hambomb.lock.autoconfigure.HambombLockProperties;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.time.Duration;
 
@@ -23,26 +25,30 @@ import java.time.Duration;
  * @author: <a herf="mailto:jarodchao@126.com>jarod </a>
  * @date: 2019-04-16
  */
-public class ZookeeperHambombLockFactory implements HambombLockFactory {
+public class ZookeeperHambombLockFactory extends AbstractHambombLockFactory implements InitializingBean {
 
     private ZkClient zkClient;
 
-    public ZookeeperHambombLockFactory(ZkClient zkClient) {
+    public ZookeeperHambombLockFactory(HambombLockProperties hambombLockProperties, ZkClient zkClient) {
+        super(hambombLockProperties);
         this.zkClient = zkClient;
+
     }
 
     @Override
-    public HambombLock create(String key, Duration duration) {
-        return null;
+    public void afterPropertiesSet() throws Exception {
+        if (!zkClient.exists(ZookeeperHambombLockImpl.rootPath)) {
+            zkClient.createPersistent(ZookeeperHambombLockImpl.rootPath);
+        }
+
+        if (!zkClient.exists(ZookeeperHambombLockImpl.rootPath + ZookeeperHambombLockImpl.projectPath)) {
+            zkClient.createPersistent(ZookeeperHambombLockImpl.rootPath + ZookeeperHambombLockImpl.projectPath);
+        }
     }
 
     @Override
-    public HambombLock create(Object object, Duration duration) {
-        return null;
+    public HambombLock create(String key, Duration timeout, Duration waitTimeout) {
+        return new ZookeeperHambombLockImpl(key, getTimeout(timeout), getWaitTimeout(waitTimeout), zkClient);
     }
 
-    @Override
-    public HambombLock create(Object object, Lockable lockable, Duration duration) {
-        return null;
-    }
 }

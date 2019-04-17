@@ -13,17 +13,27 @@
       "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties"
     },
     {
-      "name": "hambomb.cache.zkUrl",
+      "name": "hambomb.cache.zookeeper.zkUrl",
       "type": "java.lang.String",
-      "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties"
+      "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties$Zookeepr"
     },
     {
-      "name": "hambomb.cache.sessionTimeout",
+      "name": "hambomb.cache.zookeeper.sessionTimeout",
+      "type": "java.lang.Integer",
+      "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties$Zookeepr"
+    },
+    {
+      "name": "hambomb.cache.zookeeper.connectionTimeout",
+      "type": "java.lang.Integer",
+      "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties$Zookeepr"
+    },
+    {
+      "name": "hambomb.cache.lockTimeout",
       "type": "java.lang.Integer",
       "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties"
     },
     {
-      "name": "hambomb.cache.connectionTimeout",
+      "name": "hambomb.cache.lockWaitTimeout",
       "type": "java.lang.Integer",
       "sourceType": "org.hambomb.lock.autoconfigure.HambombLockProperties"
     }

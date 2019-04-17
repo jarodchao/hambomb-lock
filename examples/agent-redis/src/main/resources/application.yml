@@ -1,6 +1,8 @@
 hambomb:
   lock:
     agentStrategy: redis
+    lock-timeout: 500
+    lock-wait-timeout: 500
 
 spring:
   redis:

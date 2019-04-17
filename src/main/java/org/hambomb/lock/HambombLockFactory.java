@@ -24,9 +24,88 @@ import java.time.Duration;
 public interface HambombLockFactory {
 
 
-    HambombLock create(String key, Duration duration);
+    /**
+     * 创建HambombLock
+     * timeout 根据配置HambombLockProperties.lockTimeout
+     * waitTimeout 根据配置HambombLockProperties.lockWaitTimeout
+     * @param key lock关键字
+     * @return
+     */
+    HambombLock create(String key);
 
-    HambombLock create(Object object, Duration duration);
+    /**
+     * 创建HambombLock
+     * 不等待lock,第一次获取lock失败即获取失败。
+     * @param key
+     * @param timeout lock释放时间
+     * @return
+     */
+    HambombLock create(String key, Duration timeout);
 
-    HambombLock create(Object object, Lockable lockable, Duration duration);
+    /**
+     * 创建HambombLock
+     * @param key lock关键字
+     * @param timeout lock释放时间
+     * @param waitTimeout 等待获取lock时间
+     * @return
+     */
+    HambombLock create(String key, Duration timeout, Duration waitTimeout);
+
+    /**
+     * 创建HambombLock,lock关键字为object.hashCode().
+     * timeout 根据配置HambombLockProperties.lockTimeout
+     * waitTimeout 根据配置HambombLockProperties.lockWaitTimeout
+     * @param object 加锁对象
+     * @return
+     */
+    HambombLock create(Object object);
+
+    /**
+     * 创建HambombLock,lock关键字为object.hashCode().
+     * 不等待lock,第一次获取lock失败即获取失败。
+     * @param object 加锁对象
+     * @param timeout lock释放时间
+     * @return
+     */
+    HambombLock create(Object object, Duration timeout);
+
+    /**
+     * 创建HambombLock,lock关键字为object.hashCode().
+     * @param object 加锁对象
+     * @param timeout lock释放时间
+     * @param waitTimeout 等待获取lock时间
+     * @return
+     */
+    HambombLock create(Object object, Duration timeout, Duration waitTimeout);
+
+    /**
+     * 创建HambombLock,lock关键字为Lockable.run(object)的结果.
+     * timeout 根据配置HambombLockProperties.lockTimeout
+     * waitTimeout 根据配置HambombLockProperties.lockWaitTimeout
+     * @param object 加锁对象
+     * @param lockable
+     * @return
+     */
+    HambombLock create(Object object, Lockable lockable);
+
+    /**
+     * 创建HambombLock,lock关键字为Lockable.run(object)的结果.
+     * timeout 根据配置HambombLockProperties.lockTimeout
+     * waitTimeout 不等待lock释放
+     * @param object 加锁对象
+     * @param lockable 计算key的方法
+     * @param timeout lock释放时间
+     * @return
+     */
+    HambombLock create(Object object, Lockable lockable, Duration timeout);
+
+    /**
+     * 创建HambombLock,lock关键字为Lockable.run(object)的结果.
+     * @param object 加锁对象
+     * @param lockable 计算key的方法
+     * @param timeout lock释放时间
+     * @param waitTimeout 等待锁的时间
+     * @return
+     */
+    HambombLock create(Object object, Lockable lockable, Duration timeout, Duration waitTimeout);
 }

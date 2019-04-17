@@ -17,45 +17,40 @@ package org.hambomb.lock.service;
 
 import org.hambomb.lock.HambombLock;
 import org.hambomb.lock.HambombLockFactory;
-import org.hambomb.lock.RedisHambombLockImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author: <a herf="mailto:jarodchao@126.com>jarod </a>
- * @date: 2019-04-16
+ * @date: 2019-04-17
  */
 @Service
-public class RedisLockService {
+public class ZookeeperLockService {
 
     @Autowired
     private HambombLockFactory hambombLockFactory;
 
-    private static final Logger LOG = LoggerFactory.getLogger(RedisLockService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockService.class);
 
     public void modifyPhone() {
-        HambombLock lock = hambombLockFactory.create("HUAWEI", null,null);
+        HambombLock lock = hambombLockFactory.create("HUAWEI");
 
         if (lock.lock()) {
+
+            LOG.info("Thread is: {} 获取到锁！", Thread.currentThread().getId());
+
             try {
-                TimeUnit.MILLISECONDS.sleep(400);
+                TimeUnit.MILLISECONDS.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
 
                 lock.unlock();
             }
-
-            LOG.info("Thread is: {} 获取到锁！", Thread.currentThread().getId());
-
-        } else {
-            LOG.info("Thread is: {} 未获取到锁！", Thread.currentThread().getId());
         }
 
     }

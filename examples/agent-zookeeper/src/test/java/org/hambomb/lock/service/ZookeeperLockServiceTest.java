@@ -1,35 +1,32 @@
 package org.hambomb.lock.service;
 
-import org.hambomb.lock.AgentRedisApplication;
+import org.hambomb.lock.AgentZookeeperApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static org.junit.Assert.*;
+
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {AgentRedisApplication.class})
-public class RedisLockServiceTest {
-
-    private static final Logger LOG = LoggerFactory.getLogger(RedisLockServiceTest.class);
+@SpringBootTest(classes = {AgentZookeeperApplication.class})
+public class ZookeeperLockServiceTest {
 
     @Autowired
-    private RedisLockService redisLockService;
+    private ZookeeperLockService zookeeperLockService;
 
     @Test
     public void modifyPhone() {
 
-        redisLockService.modifyPhone();
+        zookeeperLockService.modifyPhone();
     }
 
     @Test
@@ -39,10 +36,7 @@ public class RedisLockServiceTest {
         CountDownLatch countDownLatch = new CountDownLatch(count);
 
         final List<Thread> threads = IntStream.range(0, count).mapToObj(x -> {
-            Thread thread = new Thread(() -> {
-                redisLockService.modifyPhone();
-
-            });
+            Thread thread = new Thread(() -> zookeeperLockService.modifyPhone());
             return thread;
         }).collect(Collectors.toList());
 
