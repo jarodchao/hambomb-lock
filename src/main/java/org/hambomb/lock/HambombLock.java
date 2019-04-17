@@ -21,7 +21,15 @@ package org.hambomb.lock;
  */
 public interface HambombLock {
 
+   /**
+    * 加锁
+    * @return
+    */
    boolean lock();
 
+   /**
+    * 释放锁
+    * @return
+    */
    boolean unlock();
 }

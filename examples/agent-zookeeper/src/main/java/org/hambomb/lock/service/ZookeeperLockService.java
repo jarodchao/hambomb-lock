@@ -41,7 +41,6 @@ public class ZookeeperLockService {
 
         if (lock.lock()) {
 
-            LOG.info("Thread is: {} 获取到锁！", Thread.currentThread().getId());
 
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
